@@ -34,7 +34,17 @@ Plan
 
 Use the tools in karmapi to take a look at oasis.
 
+ktools
+------
 
+Install this.
+
+It will install a bunch of executables.  These are things like
+*gulcalc*, which calculates ground up losses and *eltcalc* which does
+something with *event loss tables*, whatever they are.
+
+The next step is to get a model running and then display the inputs
+and outputs.
 
 Links
 =====
