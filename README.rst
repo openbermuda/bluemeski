@@ -27,7 +27,18 @@ See links for hints on where to get these.
 
 python >= 3.6
 
-karmapi:  
+karmapi
+
+Run
+===
+
+Adds executable *blume*::
+
+  blume -h
+
+for help.
+
+If a window pops up, press 'h' for help.  
 
 Plan
 ====
