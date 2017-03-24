@@ -7,6 +7,6 @@ Python interface to ktools.
 
 import struct
 
-def gul_read(infile):
-    """ Process a ktools gul stream """
+def gul2py(infile):
+    """ Generatori to process a ktools gul stream """
     pass
