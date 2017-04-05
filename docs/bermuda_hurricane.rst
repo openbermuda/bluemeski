@@ -16,6 +16,15 @@ Hurdat
 Wind Footprints
 ---------------
 
+Precipitation
+-------------
+
+Waves
+-----
+
+Currents
+--------
+
 Passing of the eye wall
 -----------------------
 
