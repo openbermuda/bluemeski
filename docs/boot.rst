@@ -1,8 +1,27 @@
 =========================
- Bermuda Hurricane Model
+ Bermuda Open Oasis Tank
 =========================
 
-How to build a hurricane model for Bermuda, using Oasis.
+Predicting Bermuda weather.
+
+Short, medium and long term.
+
+Data
+====
+
+Gathering the data.
+
+Sense Hat
+---------
+
+Locations
+---------
+
+History
+-------
+
+Global
+------
 
 Hazard
 ======
