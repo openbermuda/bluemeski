@@ -62,25 +62,23 @@ def main():
 
         farm.data.put(data)
 
+    farm.add(Magic, dict(data=data))
+
     compare = args.compare
     print('COMPARE', compare)
     if compare:
         compare = path / compare
 
-    if compare.exists():
-        print('compare exists')
-        b_data = base.load_folder(path)
+        if compare.exists():
+            print('compare exists')
+            b_data = base.load_folder(path)
 
-        delta = data_diff(data, b_data)
+            delta = data_diff(data, b_data)
 
-    from karmapi.mclock2 import GuidoClock
-
-    farm.add(Magic, dict(data=data))
-
-    if compare.exists():
-        farm.add(Magic, dict(data=b_data))
-        farm.add(Magic, dict(data=delta))
+            farm.add(Magic, dict(data=b_data))
+            farm.add(Magic, dict(data=delta))
         
+    from karmapi.mclock2 import GuidoClock
     farm.add(GuidoClock)
 
     pigfarm.run(farm)
