@@ -12,6 +12,25 @@ from karmapi import pigfarm, base
 
 class Magic(pigfarm.MagicCarpet):
     pass
+
+def data_diff(aa, bb):
+    """ Return something useful to compare what is aa to bb """
+
+    keys = set(aa.keys())
+    keys += set(bb.keys())
+
+    data = {}
+
+    for key in keys:
+        if key in aa and key in bb:
+            data[key] = aa - bb
+        else:
+            if key in aa:
+                data[key] = aa[key]
+            else:
+                data[key] = bb[key]
+
+    return data
     
 def main():
 
@@ -21,8 +40,11 @@ def main():
 
     parser.add_argument('--path', default='.')
     parser.add_argument('--today', action='store_true')
+
     parser.add_argument('name', nargs='?', default='sensehat')
 
+    parser.add_argument('compare', nargs='?')
+    
     args = parser.parse_args()
 
     farm = pigfarm.PigFarm()
@@ -39,11 +61,23 @@ def main():
         data = base.load_folder(path)
 
         farm.data.put(data)
+
     
+    compare = path / compare
+
+    if compare.exists():
+        b_data = base.load_folder(path)
+
+        delta = data_diff(data, b_data)
 
     from karmapi.mclock2 import GuidoClock
 
-    farm.add(Magic)
+    farm.add(Magic, dict(data=data))
+
+    if compare:
+        farm.add(Magic, dict(data=b_data))
+        farm.add(Magic, dict(data=delta))
+        
     farm.add(GuidoClock)
 
     pigfarm.run(farm)
