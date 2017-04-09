@@ -5,7 +5,7 @@ Watch the stream go by
 
 
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from karmapi import pigfarm, base
@@ -14,16 +14,16 @@ class Magic(pigfarm.MagicCarpet):
     pass
 
 def data_diff(aa, bb):
-    """ Return something useful to compare what is aa to bb """
+    """ Return something useful to compare whatever aa is to bb """
 
     keys = set(aa.keys())
-    keys += set(bb.keys())
+    keys.update(set(bb.keys()))
 
     data = {}
 
     for key in keys:
         if key in aa and key in bb:
-            data[key] = aa - bb
+            data[key] = aa[key] - bb[key]
         else:
             if key in aa:
                 data[key] = aa[key]
@@ -67,11 +67,16 @@ def main():
     compare = args.compare
     print('COMPARE', compare)
     if compare:
-        compare = path / compare
+        compare = Path(args.path) / compare
+        if args.today:
+            # set now to yesterday?
+            now = now - timedelta(days=1)
+            compare = compare / f'{now.year}/{now.month}/{now.day}'
 
+        print('COMPARE', compare)
         if compare.exists():
             print('compare exists')
-            b_data = base.load_folder(path)
+            b_data = base.load_folder(compare)
 
             delta = data_diff(data, b_data)
 
