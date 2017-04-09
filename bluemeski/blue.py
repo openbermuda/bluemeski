@@ -62,10 +62,13 @@ def main():
 
         farm.data.put(data)
 
-    
-    compare = path / compare
+    compare = args.compare
+    print('COMPARE', compare)
+    if compare:
+        compare = path / compare
 
     if compare.exists():
+        print('compare exists')
         b_data = base.load_folder(path)
 
         delta = data_diff(data, b_data)
@@ -74,7 +77,7 @@ def main():
 
     farm.add(Magic, dict(data=data))
 
-    if compare:
+    if compare.exists():
         farm.add(Magic, dict(data=b_data))
         farm.add(Magic, dict(data=delta))
         
