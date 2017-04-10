@@ -59,7 +59,7 @@ def main():
 
     if path.exists():
         data = base.load_folder(path)
-
+        data = pigfarm.make_timestamp_index(data)
         farm.data.put(data)
 
     farm.add(Magic, dict(data=data))
@@ -77,6 +77,7 @@ def main():
         if compare.exists():
             print('compare exists')
             b_data = base.load_folder(compare)
+            b_data = pigfarm.make_timestamp_index(b_data)
 
             delta = data_diff(data, b_data)
 
