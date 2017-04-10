@@ -53,9 +53,24 @@ def main():
 
     path = path / args.name
 
+    compare = args.compare
+    if compare:
+        compare = args.path / compare 
+    
     if args.today:
         now = datetime.now()
-        path = path / f'{now.year}/{now.month}/{now.day}'
+        yesterday = now - timedelta(days=1)
+
+        day = now
+
+        path = path / f'{day.year}/{day.month}/{day.day}' 
+
+        # compare to yesterday?
+        if not compare:
+            day = yesterday
+            compare = Path(args.path) / args.name
+            compare = compare / f'{day.year}/{day.month}/{day.day}'
+        
 
     if path.exists():
         data = base.load_folder(path)
@@ -64,25 +79,16 @@ def main():
 
     farm.add(Magic, dict(data=data))
 
-    compare = args.compare
     print('COMPARE', compare)
-    if compare:
-        compare = Path(args.path) / compare
-        if args.today:
-            # set now to yesterday?
-            now = now - timedelta(days=1)
-            compare = compare / f'{now.year}/{now.month}/{now.day}'
+    if compare and compare.exists():
+        print('compare exists')
+        b_data = base.load_folder(compare)
+        b_data = pigfarm.make_timestamp_index(b_data)
 
-        print('COMPARE', compare)
-        if compare.exists():
-            print('compare exists')
-            b_data = base.load_folder(compare)
-            b_data = pigfarm.make_timestamp_index(b_data)
+        delta = data_diff(data, b_data)
 
-            delta = data_diff(data, b_data)
-
-            farm.add(Magic, dict(data=b_data))
-            farm.add(Magic, dict(data=delta))
+        farm.add(Magic, dict(data=b_data))
+        farm.add(Magic, dict(data=delta))
         
     from karmapi.mclock2 import GuidoClock
     farm.add(GuidoClock)
