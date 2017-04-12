@@ -81,6 +81,7 @@ def main():
     else:
         print(path, 'AWOL')
         farm.add(Magic)
+        compare = None
 
     print('COMPARE', compare)
     if compare and compare.exists():
