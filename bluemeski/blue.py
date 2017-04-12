@@ -31,6 +31,20 @@ def data_diff(aa, bb):
                 data[key] = bb[key]
 
     return data
+
+def filter_data(data, start):
+
+    return data
+    result = {}
+
+    s = start
+    start = f'{s.year}-{s.month}-{s.day} {s.hour:02}:{s.minute:02}:{s.second:02}'
+    
+    for key, frame in data.items():
+        print(key, start)
+        result[key] = frame[start:]
+
+    return result
     
 def main():
 
@@ -40,6 +54,7 @@ def main():
 
     parser.add_argument('--path', default='.')
     parser.add_argument('--today', action='store_true')
+    parser.add_argument('--now', action='store_true')
 
     parser.add_argument('name', nargs='?', default='sensehat')
 
@@ -55,10 +70,16 @@ def main():
 
     compare = args.compare
     if compare:
-        compare = args.path / compare 
+        compare = args.path / compare
+
+    today = args.today
+    now = datetime.now()
     
-    if args.today:
-        now = datetime.now()
+    if args.now:
+        today = True
+        start = now - timedelta(seconds=3600)
+    
+    if today:
         yesterday = now - timedelta(days=1)
 
         day = now
@@ -75,6 +96,10 @@ def main():
     if path.exists():
         data = base.load_folder(path)
         data = pigfarm.make_timestamp_index(data)
+        
+        if args.now:
+            data = filter_data(data, start)
+            
         farm.data.put(data)
 
         farm.add(Magic, dict(data=data))
@@ -88,6 +113,8 @@ def main():
         print('compare exists')
         b_data = base.load_folder(compare)
         b_data = pigfarm.make_timestamp_index(b_data)
+        if args.now:
+            b_data = filter_data(b_data, start)
 
         delta = data_diff(data, b_data)
 
