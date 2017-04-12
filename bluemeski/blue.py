@@ -77,7 +77,10 @@ def main():
         data = pigfarm.make_timestamp_index(data)
         farm.data.put(data)
 
-    farm.add(Magic, dict(data=data))
+        farm.add(Magic, dict(data=data))
+    else:
+        print(path, 'AWOL')
+        farm.add(Magic)
 
     print('COMPARE', compare)
     if compare and compare.exists():
