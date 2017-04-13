@@ -38,7 +38,7 @@ def filter_data(data, start):
     result = {}
 
     s = start
-    start = f'{s.year}-{s.month}-{s.day} {s.hour:02}:{s.minute:02}:{s.second:02}'
+    start = f'{s.year}-{s.month:02}-{s.day:02} {s.hour:02}:{s.minute:02}:{s.second:02}'
     
     for key, frame in data.items():
         print(key, start)
