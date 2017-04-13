@@ -91,7 +91,7 @@ def main():
     if path.exists():
         data = base.load_folder(path)
         
-        farm.add(Magic, dict(data=data, begin=start, end=end))
+        farm.add(Magic, dict(data=data, begin=start, end=end, title=path))
     else:
         print(path, 'AWOL')
         farm.add(Magic)
@@ -104,8 +104,8 @@ def main():
 
         delta = data_diff(data, b_data)
 
-        farm.add(Magic, dict(data=b_data, begin=cstart, end=cend))
-        farm.add(Magic, dict(data=delta))
+        farm.add(Magic, dict(data=b_data, begin=cstart, end=cend, title=compare))
+        farm.add(Magic, dict(data=delta, title=f'{path} - {compare}'))
         
     from karmapi.mclock2 import GuidoClock
     farm.add(GuidoClock)
