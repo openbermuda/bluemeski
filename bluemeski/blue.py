@@ -64,6 +64,7 @@ def main():
     start = None
     end = None
     cstart = None
+    cend = None
 
     
     if args.now:
@@ -82,8 +83,11 @@ def main():
         # compare to yesterday?
         if not compare:
             day = yesterday
-            cstart = yesterday - timedelta(seconds=3600)
-            cend =  yesterday
+
+            if args.now:
+                cstart = yesterday - timedelta(seconds=3600)
+                cend =  yesterday
+                
             compare = Path(args.path) / args.name
             compare = compare / f'{day.year}/{day.month}/{day.day}'
             print('compare:', cstart, cend)        
