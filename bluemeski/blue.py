@@ -42,6 +42,7 @@ def main():
     parser.add_argument('--path', default='.')
     parser.add_argument('--today', action='store_true')
     parser.add_argument('--now', action='store_true')
+    parser.add_argument('--hours', type=float, default=1)
 
     parser.add_argument('name', nargs='?', default='sensehat')
 
@@ -60,16 +61,16 @@ def main():
         compare = args.path / compare
 
     today = args.today
-    now = datetime.now()
+    now = datetime.utcnow()
     start = None
     end = None
     cstart = None
     cend = None
 
-    
+    hours = args.hours
     if args.now:
         today = True
-        start = now - timedelta(seconds=3600)
+        start = now - timedelta(seconds=3600 * hours)
         end = now
         cstart = start
         
@@ -85,7 +86,7 @@ def main():
             day = yesterday
 
             if args.now:
-                cstart = yesterday - timedelta(seconds=3600)
+                cstart = yesterday - timedelta(seconds=3600 * hours)
                 cend =  yesterday
                 
             compare = Path(args.path) / args.name
