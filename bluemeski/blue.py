@@ -32,19 +32,6 @@ def data_diff(aa, bb):
 
     return data
 
-def filter_data(data, start):
-
-    return data
-    result = {}
-
-    s = start
-    start = f'{s.year}-{s.month:02}-{s.day:02} {s.hour:02}:{s.minute:02}:{s.second:02}'
-    
-    for key, frame in data.items():
-        print(key, start)
-        result[key] = frame[start:]
-
-    return result
     
 def main():
 
@@ -74,12 +61,15 @@ def main():
 
     today = args.today
     now = datetime.now()
+    start = None
+    end = None
     cstart = None
 
     
     if args.now:
         today = True
         start = now - timedelta(seconds=3600)
+        end = now
         cstart = start
         
     if today:
@@ -92,21 +82,16 @@ def main():
         # compare to yesterday?
         if not compare:
             day = yesterday
-            cstart = start - timedelta(days=1)
+            cstart = yesterday - timedelta(seconds=3600)
+            cend =  yesterday
             compare = Path(args.path) / args.name
             compare = compare / f'{day.year}/{day.month}/{day.day}'
-        
+            print('compare:', cstart, cend)        
 
     if path.exists():
         data = base.load_folder(path)
-        data = pigfarm.make_timestamp_index(data)
         
-        if args.now:
-            data = filter_data(data, start)
-            
-        farm.data.put(data)
-
-        farm.add(Magic, dict(data=data))
+        farm.add(Magic, dict(data=data, begin=start, end=end))
     else:
         print(path, 'AWOL')
         farm.add(Magic)
@@ -116,15 +101,10 @@ def main():
     if compare and compare.exists():
         print('compare exists')
         b_data = base.load_folder(compare)
-        b_data = pigfarm.make_timestamp_index(b_data)
-        if args.now:
-            cstart = cstart or start
-            print('compare start', cstart)
-            b_data = filter_data(b_data, cstart)
 
         delta = data_diff(data, b_data)
 
-        farm.add(Magic, dict(data=b_data))
+        farm.add(Magic, dict(data=b_data, begin=cstart, end=cend))
         farm.add(Magic, dict(data=delta))
         
     from karmapi.mclock2 import GuidoClock
