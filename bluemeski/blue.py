@@ -74,11 +74,14 @@ def main():
 
     today = args.today
     now = datetime.now()
+    cstart = None
+
     
     if args.now:
         today = True
         start = now - timedelta(seconds=3600)
-    
+        cstart = start
+        
     if today:
         yesterday = now - timedelta(days=1)
 
@@ -89,6 +92,7 @@ def main():
         # compare to yesterday?
         if not compare:
             day = yesterday
+            cstart = start - timedelta(days=1)
             compare = Path(args.path) / args.name
             compare = compare / f'{day.year}/{day.month}/{day.day}'
         
@@ -114,7 +118,9 @@ def main():
         b_data = base.load_folder(compare)
         b_data = pigfarm.make_timestamp_index(b_data)
         if args.now:
-            b_data = filter_data(b_data, start)
+            cstart = cstart or start
+            print('compare start', cstart)
+            b_data = filter_data(b_data, cstart)
 
         delta = data_diff(data, b_data)
 
