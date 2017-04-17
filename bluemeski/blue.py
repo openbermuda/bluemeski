@@ -58,7 +58,7 @@ def main():
 
     compare = args.compare
     if compare:
-        compare = args.path / compare
+        compare = Path(args.path) / compare
 
     today = args.today
     now = datetime.utcnow()
