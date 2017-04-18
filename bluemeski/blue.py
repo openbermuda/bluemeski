@@ -43,6 +43,7 @@ def main():
     parser.add_argument('--today', action='store_true')
     parser.add_argument('--now', action='store_true')
     parser.add_argument('--hours', type=float, default=1)
+    parser.add_argument('--noclock', action='store_true')
 
     parser.add_argument('name', nargs='?', default='sensehat')
 
@@ -111,9 +112,10 @@ def main():
 
         farm.add(Magic, dict(data=b_data, begin=cstart, end=cend, title=compare))
         farm.add(Magic, dict(data=delta, title=f'{path} - {compare}'))
-        
-    from karmapi.mclock2 import GuidoClock
-    farm.add(GuidoClock)
+
+    if not args.noclock:
+        from karmapi.mclock2 import GuidoClock
+        farm.add(GuidoClock)
 
     pigfarm.run(farm)
     
