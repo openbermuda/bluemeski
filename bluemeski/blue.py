@@ -44,6 +44,7 @@ def main():
     parser.add_argument('--now', action='store_true')
     parser.add_argument('--hours', type=float, default=1)
     parser.add_argument('--noclock', action='store_true')
+    parser.add_argument('--version', default='.')
 
     parser.add_argument('name', nargs='?', default='sensehat')
 
@@ -93,6 +94,11 @@ def main():
             compare = Path(args.path) / args.name
             compare = compare / f'{day.year}/{day.month}/{day.day}'
             print('compare:', cstart, cend)        
+
+    if args.version:
+        path = path / args.version
+        if not compare:
+            compare = compare / args.version
 
     if path.exists():
         data = base.load_folder(path)
