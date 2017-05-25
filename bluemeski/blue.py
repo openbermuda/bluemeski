@@ -97,7 +97,7 @@ def main():
 
     if args.version:
         path = path / args.version
-        if not compare:
+        if compare:
             compare = compare / args.version
 
     if path.exists():
