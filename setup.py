@@ -22,7 +22,7 @@ setup(
     version=__version__,
     description='Work with oases',
     long_description=long_description,
-    url='https://github.com/openbermuda/bluemeski',
+    url='https://github.com/swfiua/bluemeski',
     download_url='https://github.com/openbermuda/bluemeski/tarball/' + __version__,
     license='GPL v 3',
     classifiers = [
